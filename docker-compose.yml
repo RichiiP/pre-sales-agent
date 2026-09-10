@@ -1,0 +1,15 @@
+services:
+  backend:
+    build: ./backend
+    environment:
+      TD_SYNNEX_MODE: ${TD_SYNNEX_MODE:-mock}
+      DATABASE_URL: ${DATABASE_URL:-sqlite:////data/product_matcher.db}
+      ALLOWED_ORIGINS: ${ALLOWED_ORIGINS:-http://localhost:8080}
+    volumes: [matcher_data:/data]
+    restart: unless-stopped
+  frontend:
+    build: ./frontend
+    ports: ["8080:80"]
+    depends_on: [backend]
+    restart: unless-stopped
+volumes: {matcher_data: {}}
